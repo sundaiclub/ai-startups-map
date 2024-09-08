@@ -1,0 +1,10 @@
+psycopg2-binary
+scikit-learn
+transformers
+pytorch
+streamlit
+plotly
+plotly-express
+pgvector
+pandas
+numpy
