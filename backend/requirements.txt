@@ -1,0 +1,2 @@
+json
+git+https://github.com/sundai-club/TikTok_generation_platform.git@285f307d649566a1921349bb329474536dfb2657
