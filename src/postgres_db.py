@@ -69,7 +69,6 @@ class PostgresDB:
                 description_vector
             ))
             self.conn.commit()
-            print(f"Company '{company_data['company']}' inserted successfully.")
             return company_id
         except psycopg2.Error as e:
             self.conn.rollback()
@@ -101,7 +100,6 @@ class PostgresDB:
 
     def search_similar_descriptions(self, query_description, limit=5):
         query_vector = self.model.batch_encode(query_description).tolist()[0]
-        print(query_vector)
         self.cursor.execute("""
         SELECT company, description, description_vector, description_vector <-> (%s::vector) AS distance
         FROM companies

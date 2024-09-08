@@ -9,7 +9,6 @@ db.init_vector_index()
 def load_and_index(path):
     df = pd.read_csv(path)
     for index, row in df.iterrows():
-        print(row)
         company_data = {
             'company': row['Company'],
             'country': row['Country'],

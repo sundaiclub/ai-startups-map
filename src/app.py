@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 encoder = Encoder()
 
 db = PostgresDB(dbname="postgres", user="postgres", password="postgres")
-print(db.get_num_rows())
 
 def create_tsne_plot(tsne_embeddings, labels, query_embedding):
     df = pd.DataFrame(tsne_embeddings, columns=['x', 'y'])
