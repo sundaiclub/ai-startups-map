@@ -78,7 +78,6 @@ def main():
         if query:
             try:
                 st.session_state.query = query
-                st.session_state.chat_session = ChatSession()
                 df, tsne_embeds, labels = perform_search(query)
                 st.session_state.df = df
 
