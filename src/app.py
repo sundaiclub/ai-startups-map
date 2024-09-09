@@ -6,7 +6,6 @@ import plotly.express as px
 # Custom modules
 from postgres_db import PostgresDB
 from dimension_reduction import reduce_dimensions
-from chat import ChatSession
 
 # Initialize database connection
 @st.cache_resource

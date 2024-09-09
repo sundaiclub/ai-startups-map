@@ -1,4 +1,4 @@
-from openai_api import OpenAIAPI
+# from openai_api import OpenAIAPI
 
 prompt = '''
 You are a helpful Assistant.
@@ -20,7 +20,7 @@ Assistant:
 class ChatSession:
 
     def __init__(self):
-        self.openai_api = OpenAIAPI()
+        # self.openai_api = OpenAIAPI()
         self.history = {}
 
 
