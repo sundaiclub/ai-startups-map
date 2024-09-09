@@ -101,7 +101,7 @@ class PostgresDB:
     def search_similar_descriptions(self, query_description, limit=200):
         query_vector = self.model.batch_encode(query_description).tolist()[0]
         self.cursor.execute("""
-        SELECT company, description, description_vector, description_vector <-> (%s::vector) AS distance
+        SELECT company, country, sector, description, description_vector, description_vector <-> (%s::vector) AS distance
         FROM companies
         ORDER BY distance
         LIMIT %s;

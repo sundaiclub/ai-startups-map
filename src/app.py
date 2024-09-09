@@ -8,27 +8,27 @@ from postgres_db import PostgresDB
 from dimension_reduction import reduce_dimensions
 
 # Initialize database connection
-@st.cache_resource
 def init_db():
     return PostgresDB(dbname="postgres", user="postgres", password="postgres")
 
 db = init_db()
 
 def get_shade(distance, mean, std_dev):
-    if mean - 2 * std_dev <= distance < mean - 1 * std_dev:
-        return "#F0FFFF"
+    if distance < mean - 2 * std_dev:
+        return "Very Highly Relevant"  # Dark Blue
+    elif mean - 2 * std_dev <= distance < mean - 1.5 * std_dev:
+        return "Highly Relevant"  # Royal Blue
+    elif mean - 1.5 * std_dev <= distance < mean - 1 * std_dev:
+        return "Relevant"  # Steel Blue
     elif mean - 1 * std_dev <= distance < mean:
-        return "#89CFF0"  # Royal Blue
+        return "OKOK"  # Sky Blue
     elif mean <= distance < mean + 1 * std_dev:
-        return "#0096FF"  # Steel Blue
-    elif mean + 1 * std_dev <= distance < mean + 2 * std_dev:
-        return "#0000FF"  # Sky Blue
-    
+        return "Not So Relevant"  # Light Blue
     else:
-        return "#0047AB"  # Light Blue
+        return "Very Not So Relevant"  # Very Light Blue
 
 
-def create_tsne_plot(tsne_embeddings, labels, query_embedding):
+def create_tsne_plot(tsne_embeddings, labels, hover_data, query_embedding):
     """
     Creates a t-SNE plot using the embeddings and labels.
     """
@@ -38,7 +38,7 @@ def create_tsne_plot(tsne_embeddings, labels, query_embedding):
     std_dev = np.std(labels)
     labels = [get_shade(dist, mean, std_dev) for dist in labels]
     df['label'] = labels
-    
+    df['hover_data'] = hover_data
     query_df = pd.DataFrame([query_embedding], columns=['x', 'y'])
     query_df['label'] = 'Query'
 
@@ -46,24 +46,32 @@ def create_tsne_plot(tsne_embeddings, labels, query_embedding):
 
     fig = px.scatter(
         df_combined, 
+        hover_name='hover_data',
         x='x', y='y', 
         color='label',
-        color_discrete_map={"#0047AB": "#0047AB", "#0000FF": "#0000FF", "#0096FF": "#0096FF", "#89CFF0": "#89CFF0", "#F0FFFF": "#F0FFFF", "Query": "red"},
-        title='t-SNE Embeddings'
+        color_discrete_map={
+            "Very Highly Relevant": "#00008B",   # Dark Blue
+            "Highly Relevant": "#4169E1",        # Royal Blue
+            "Relevant": "#4682B4",              # Steel Blue
+            "OKOK": "#87CEEB",                  # Sky Blue
+            "Not So Relevant": "#ADD8E6",        # Light Blue
+            "Very Not So Relevant": "#E0FFFF",  # Very Light Blue
+            "Query": "red"
+        },
+        title='t-SNE Embeddings',
     )
 
     return fig
 
+
 def perform_search(query):
     query_embed, results = db.search_similar_descriptions(query)
-    embeddings = np.array([query_embed] + [res[2] for res in results])
+    embeddings = np.array([query_embed] + [res[4] for res in results])
     tsne_embeds = reduce_dimensions(embeddings)
-    labels = [res[0] for res in results]
-
-    df = pd.DataFrame(results, columns=['Company', 'Description', 'Vector', 'Distance'])
+    df = pd.DataFrame(results, columns=['Company', 'Country', 'Sector', 'Description', 'Vector', 'Distance'])
     df['X'] = tsne_embeds[1:, 0]
     df['Y'] = tsne_embeds[1:, 1]
-    df = df[['Company', 'Description', 'X', 'Y', 'Distance']]
+    df = df[['Company', 'Country', 'Sector', 'Description', 'X', 'Y', 'Distance']]
     df['info'] = df['Company'] + '\n' + df['Description']
 
     return df, tsne_embeds, df['Distance'].tolist()
@@ -78,13 +86,14 @@ def main():
             try:
                 st.session_state.query = query
                 df, tsne_embeds, labels = perform_search(query)
+                df['hover_info'] = 'Company: ' + df['Company'] + '\n'+ 'Country: ' + df['Country'] + '\n' + 'Sector: ' + df['Sector'] 
                 st.session_state.df = df
 
                 st.subheader("Search Results")
                 st.dataframe(df)
 
                 st.subheader("t-SNE Visualization")
-                fig = create_tsne_plot(tsne_embeds[1:], labels, tsne_embeds[0])
+                fig = create_tsne_plot(tsne_embeds[1:], labels, df['hover_info'].tolist(), tsne_embeds[0])
                 st.plotly_chart(fig)
 
             except Exception as e:
