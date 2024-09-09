@@ -29,7 +29,7 @@ class PostgresDB:
             company TEXT,
             country TEXT,
             revenue TEXT,
-            head_count INTEGER,
+            head_count TEXT,
             funding TEXT,
             sector TEXT,
             description TEXT,
@@ -61,7 +61,7 @@ class PostgresDB:
                 company_data['company'],
                 company_data['country'],
                 company_data['revenue'],
-                int(company_data['head_count'].replace(',', '')),
+                company_data['head_count'],
                 company_data['funding'],
                 company_data['sector'],
                 company_data['description'],
@@ -98,7 +98,7 @@ class PostgresDB:
         self.cursor.execute("DELETE FROM companies WHERE id = %s", (company_id,))
         self.conn.commit()
 
-    def search_similar_descriptions(self, query_description, limit=5):
+    def search_similar_descriptions(self, query_description, limit=200):
         query_vector = self.model.batch_encode(query_description).tolist()[0]
         self.cursor.execute("""
         SELECT company, description, description_vector, description_vector <-> (%s::vector) AS distance
