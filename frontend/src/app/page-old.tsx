@@ -1,4 +1,3 @@
-import HeroSection from "travel-buddy/app/_components/HeroSection";
 import { api, HydrateClient } from "travel-buddy/trpc/server";
 
 export default async function Home() {
@@ -10,7 +9,7 @@ export default async function Home() {
     <HydrateClient>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-red-500 to-red-300 text-white">
         {/* Hero Section */}
-        <HeroSection />
+        
 
         {/* Integration Section */}
         <section
