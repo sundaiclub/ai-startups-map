@@ -6,10 +6,11 @@ import { ChevronRight, BarChart, Users, Building, CheckCircle } from "lucide-rea
 import Link from "next/link"
 
 export default function Component() {
-    const openNewTab = () => {
-      window.open('https://forms.gle/LNVZ5eF2tUKcinrL8', '_blank');
-    };
-  
+  const openNewTab = () => {
+    window.open('https://forms.gle/LNVZ5eF2tUKcinrL8', '_blank');
+  };
+
+
   return (
     <div id='home' className="flex flex-col min-h-screen bg-[#f5e6d3]">
       <header className="px-4 lg:px-6 h-14 flex items-center bg-[#e6d2b5]">
@@ -18,7 +19,7 @@ export default function Component() {
           <span className="sr-only">B2B Connect</span>
         </Link>
         <nav className="ml-auto flex gap-4 sm:gap-6">
-          <Link className="text-sm font-medium hover:underline underline-offset-4 text-[#5e4a33]" href="#">
+          <Link className="text-sm font-medium hover:underline underline-offset-4 text-[#5e4a33]" href="#graph">
             Features
           </Link>
           <Link className="text-sm font-medium hover:underline underline-offset-4 text-[#5e4a33]" href="#about">
@@ -49,18 +50,21 @@ export default function Component() {
                   </Button>
                 </Link>
                 <Link href="#about">
-                <Button variant="outline" className="text-[#8b6e4e] border-[#8b6e4e] hover:bg-[#e6d2b5]">Learn More</Button>
+                  <Button variant="outline" className="text-[#8b6e4e] border-[#8b6e4e] hover:bg-[#e6d2b5]">Learn More</Button>
                 </Link>
               </div>
 
             </div>
           </div>
         </section>
-        <section id='graph' className="w-full py-12 md:py-32 flex justify-center lg:py-48 bg-[#e6d2b5]">
-          <div className="container px-4 md:px-6">
-           
-          </div>
+        <section id="graph" className="w-screen relative min-h-[200vh]">
+          <iframe
+            src="https://ai-startups-map-backend.sundai.club/"
+            title="Integrated App"
+            className="min-h-[200vh] w-screen absolute top-0 left-0 rounded-xl"
+          ></iframe>
         </section>
+
         <section id='about' className="w-full py-12 md:py-24 flex justify-center lg:py-32 bg-[#f5e6d3]">
           <div className="container px-4 md:px-6">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-center mb-12 text-[#5e4a33]">Why Choose Us?</h2>
@@ -99,9 +103,9 @@ export default function Component() {
                 </p>
               </div>
               <div className="w-full max-w-sm space-y-2">
-                  <Link href="https://forms.gle/LNVZ5eF2tUKcinrL8" target="_blank">
-                    <Button size="xl" className="bg-[#8b6e4e] text-white hover:bg-[#725a3e]" onClick={openNewTab} >Sign Up</Button>
-                  </Link> 
+                <Link href="https://forms.gle/LNVZ5eF2tUKcinrL8" target="_blank">
+                  <Button size="xl" className="bg-[#8b6e4e] text-white hover:bg-[#725a3e]" onClick={openNewTab} >Sign Up</Button>
+                </Link>
               </div>
             </div>
           </div>
@@ -111,10 +115,10 @@ export default function Component() {
         <p className="text-xs text-[#8b6e4e]">© 2024 Sundai.Club. All rights reserved.</p>
         <nav className="sm:ml-auto flex gap-4 sm:gap-6">
           <Link className="text-xs hover:underline underline-offset-4 text-[#5e4a33]" href="#home">
-            Terms of Service
+            Back To Top
           </Link>
           <Link className="text-xs hover:underline underline-offset-4 text-[#5e4a33]" href="#">
-            Privacy
+            Terms of Service
           </Link>
         </nav>
       </footer>
